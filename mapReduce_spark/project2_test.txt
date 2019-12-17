@@ -1,0 +1,3 @@
+1 dis_I_dis dis_like_dis dis_data_dis dis_science_dis
+2 dis_I_dis dis_hate_dis dis_data_dis
+3 dis_want_dis dis_A_dis
