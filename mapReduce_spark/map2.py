@@ -44,10 +44,8 @@ def reduce_words (a, b):
 
 TFIDF_matrix = sc.parallelize(documents_rdd.reduce(reduce_words)).distinct().map(lambda x: (x, {}))
 # [TEST]
-print(TFIDF_matrix.collect())
+# print(TFIDF_matrix.collect())
 
-
-TFIDF_matrix
 
 # TF
 def processDocument_tf (document):
