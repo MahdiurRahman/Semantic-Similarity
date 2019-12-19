@@ -60,7 +60,7 @@ for word in inverse_document_frequency:
     inverse_document_frequency[word] = math.log10(total_documents / inverse_document_frequency[word])
 
 # TF-IDF
-
+print(inverse_document_frequency)
 def process_tf_idf (map_tuple):
     return_tuple = map_tuple
     for entry in return_tuple[1]:
@@ -69,6 +69,12 @@ def process_tf_idf (map_tuple):
 
 tf_idf = sc.parallelize(term_frequency).map(lambda x: process_tf_idf(x)).collect()
 print(tf_idf)
+
+
+
+
+
+
 
 # close Spark
 sc.stop()
