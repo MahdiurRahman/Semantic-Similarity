@@ -16,7 +16,7 @@ import math
 inFile = sc.textFile(sys.argv[1])
 documents_rdd = sc.parallelize(inFile.map(lambda line: line.split(' ')).collect()).persist(storageLevel=StorageLevel(True, True, False, False, 1))
 document_count = documents_rdd.count()
-print(document_count)
+# print(document_count)
 ####################################
 
 # Number of words:
@@ -28,7 +28,7 @@ def num_words (x):
     return count
 words_per_doc = sc.parallelize(documents_rdd.map(lambda x: num_words(x)).collect()).persist(storageLevel=StorageLevel(True, True, False, False, 1))
 # [TEST]
-print(words_per_doc.collect())
+# print(words_per_doc.collect())
 
 # Unique Words List
 def reduce_words (a, b):
@@ -43,7 +43,7 @@ def reduce_words (a, b):
 
 TFIDF_matrix = sc.parallelize(documents_rdd.reduce(reduce_words)).distinct().map(lambda x: (x, {}))
 # [TEST]
-print(TFIDF_matrix.collect())
+# print(TFIDF_matrix.collect())
 
 ###############################
 
@@ -120,36 +120,44 @@ def form2 (tfidf, matrix):
     return semantics
 
 use_this = form2(tf_idf_local, TFIDF_matrix_local)
-print(use_this)
+# print(use_this)
 
-user_input = "dis_breast_cancer_dis"
+user_input = input("Enter a word: ")
 
 def formAnswer (word, use_this):
     answer = []
-    tuple_ = ()
+    tuple_ = ("", {})
     for entry in use_this:
-        if word != entry[0]:
+        if word == entry[0]:
             tuple_ = entry
+            # print("TUPLE", tuple_)
     for entry in use_this:
         if word != entry[0]:
             map1 = tuple_[1]
             map2 = entry[1]
-            sum = 0
+            # print("map1", map1)
+            # print("map2", map2)
+            sum = 0.0
             for item in map1:
                 if item in map2:
-                    sum += (map1[item] * map2[item])
-            square1 = 0
+                    sum += float(map1[item] * map2[item])
+            square1 = 0.0
             for item in map1:
-                square1 += (map1[item] * map1[item])
-            square2 = 0
+                square1 += float(map1[item] * map1[item])
+            square2 = 0.0
             for item in map2:
-                square2 += (map2[item] * map2[item])
-            final = sum / (math.sqrt(square1) * math.sqrt(square2))
+                square2 += float(map2[item] * map2[item])
+            final = float(sum / (math.sqrt(square1) * math.sqrt(square2)))
             answer.append((entry[0], final))
     return answer
 
 answer = formAnswer(user_input, use_this)
-print(answer)
+answer.sort(key=lambda x: x[1])
+
+
+# PRINT
+for item in answer:
+    print(user_input, "-", item[0], ":", item[1])
 
 
     
